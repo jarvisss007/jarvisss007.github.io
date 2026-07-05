@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Anupam Patil — Quantitative Finance Research</title>
+<meta name="description" content="FP&A analyst and quantitative finance researcher. Two working papers on honest out-of-sample evaluation: directional-change ML strategies and hidden Markov regime models.">
+<style>
+  :root{
+    --bg:#0d1117; --panel:#161b22; --line:#21262d; --text:#e6edf3;
+    --muted:#8b949e; --accent:#58a6ff; --calm:#2a9d8f; --normal:#e9c46a;
+    --turb:#e76f51; --mono:'SF Mono',ui-monospace,Menlo,Consolas,monospace;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--text);font:16px/1.65 -apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif}
+  a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+  .wrap{max-width:880px;margin:0 auto;padding:0 24px}
+  header{padding:88px 0 56px;border-bottom:1px solid var(--line)}
+  h1{font-size:2.3rem;font-weight:700;letter-spacing:-.02em}
+  .tagline{font-size:1.25rem;color:var(--muted);margin-top:10px;max-width:620px}
+  .tagline b{color:var(--text);font-weight:600}
+  .links{margin-top:26px;display:flex;gap:14px;flex-wrap:wrap}
+  .links a{border:1px solid var(--line);background:var(--panel);padding:8px 16px;border-radius:8px;font-size:.92rem;color:var(--text)}
+  .links a:hover{border-color:var(--accent);text-decoration:none;color:var(--accent)}
+  section{padding:52px 0;border-bottom:1px solid var(--line)}
+  h2{font-size:1.5rem;margin-bottom:8px;letter-spacing:-.01em}
+  .sub{color:var(--muted);margin-bottom:28px}
+  .paper{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:26px;margin-bottom:22px}
+  .paper h3{font-size:1.12rem;line-height:1.45;margin-bottom:6px}
+  .paper .meta{font-size:.85rem;color:var(--muted);font-family:var(--mono);margin-bottom:12px}
+  .paper p{color:#c9d1d9;font-size:.95rem}
+  .finding{margin-top:12px;padding:12px 16px;border-left:3px solid var(--accent);background:rgba(88,166,255,.06);border-radius:0 8px 8px 0;font-size:.93rem}
+  .badges{margin-top:14px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  .badges img{height:20px}
+  .plink{font-size:.9rem;font-family:var(--mono)}
+  #chartbox{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:22px}
+  #chartbox .legend{display:flex;gap:18px;font-size:.82rem;color:var(--muted);margin-bottom:10px;flex-wrap:wrap;font-family:var(--mono)}
+  .dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:-1px}
+  canvas{width:100%;display:block;cursor:crosshair}
+  #tip{position:fixed;pointer-events:none;background:#000c;border:1px solid var(--line);border-radius:8px;padding:8px 12px;font-size:.8rem;font-family:var(--mono);display:none;z-index:10;backdrop-filter:blur(4px)}
+  .statecards{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-top:16px}
+  .sc{border:1px solid var(--line);border-radius:10px;padding:14px 16px;font-size:.85rem}
+  .sc b{display:block;font-size:.95rem;margin-bottom:4px}
+  .sc .num{font-family:var(--mono);color:var(--muted)}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+  @media(max-width:640px){.grid2{grid-template-columns:1fr}}
+  .xp h3{font-size:1rem} .xp .meta{font-size:.83rem;color:var(--muted);font-family:var(--mono);margin-bottom:6px}
+  .xp p{font-size:.92rem;color:#c9d1d9}
+  .xp>div{margin-bottom:22px}
+  footer{padding:40px 0 60px;color:var(--muted);font-size:.85rem}
+  .note{font-size:.8rem;color:var(--muted);margin-top:10px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>Anupam Patil</h1>
+  <p class="tagline">FP&amp;A analyst &amp; quantitative finance researcher. I test whether popular
+  quant ideas survive <b>honest out-of-sample evaluation</b> — and publish the code either way.</p>
+  <div class="links">
+    <a href="https://github.com/jarvisss007">GitHub</a>
+    <a href="https://www.linkedin.com/in/anupam-p-patil">LinkedIn</a>
+    <a href="mailto:apati077@ucr.edu">apati077@ucr.edu</a>
+  </div>
+</header>
+
+<section id="research">
+  <h2>Working Papers</h2>
+  <p class="sub">Every number reproduces from public data with one command; automated tests re-verify the papers&rsquo; results on every commit.</p>
+
+  <div class="paper">
+    <h3>Do Hidden Markov Regimes Add Out-of-Sample Value?<br>
+    <span style="font-weight:400;font-size:.95rem;color:var(--muted)">Separating fat tails from hidden states in volatility forecasting, density calibration, and tail risk</span></h3>
+    <div class="meta">2026 · 7 models · S&amp;P 500, NASDAQ 1999–2026 · WTI 1986–2026 · 5,600–8,900 OOS days incl. 2008 &amp; COVID</div>
+    <p>Implemented Gaussian and Student-t hidden Markov models from scratch (Baum–Welch, Viterbi,
+    online filtering) — the mathematics Renaissance Technologies was founded on — and fielded them
+    against GARCH-Normal/t, EWMA, and simpler baselines across three scoring dimensions: point
+    forecasts (QLIKE, Diebold–Mariano, model confidence sets), predictive densities (log score,
+    Berkowitz), and tail risk (multi-level VaR with Kupiec/Christoffersen backtests, expected-shortfall calibration).</p>
+    <div class="finding"><b>Finding:</b> fat tails — not hidden states — repair VaR/ES calibration.
+    Recursive variance, not regime discreteness, provides crisis adaptivity: HMM volatility ceilings
+    estimated on pre-crisis history failed in 2008. Hidden states earn their keep <i>descriptively</i>,
+    discovering the leverage effect unsupervised.</div>
+    <div class="badges">
+      <img src="https://github.com/jarvisss007/regime-monte-carlo/actions/workflows/ci.yml/badge.svg" alt="CI status">
+      <a class="plink" href="https://github.com/jarvisss007/regime-monte-carlo/blob/main/paper/hmm_paper.pdf">paper.pdf</a>
+      <a class="plink" href="https://github.com/jarvisss007/regime-monte-carlo">code &amp; data →</a>
+    </div>
+  </div>
+
+  <div class="paper">
+    <h3>Do Machine-Learning Filters on Directional-Change Events Survive Out-of-Sample?<br>
+    <span style="font-weight:400;font-size:.95rem;color:var(--muted)">A cautionary study across equities and commodities</span></h3>
+    <div class="meta">2026 · walk-forward + transaction costs + block-bootstrap inference · 3 asset classes, 20–33 years</div>
+    <p>Reproduced a published event-based trading strategy and subjected it to the discipline of the
+    backtest-overfitting literature. The naive rule is strongly loss-making after costs; an ML filter
+    rescues it but never generates statistically significant excess returns over buy-and-hold.</p>
+    <div class="finding"><b>Finding:</b> an honest null. The strategy&rsquo;s published edge is an artifact
+    of weak evaluation; its one robust benefit is a roughly halved maximum drawdown.</div>
+    <div class="badges">
+      <img src="https://github.com/jarvisss007/dc-ml-trading/actions/workflows/ci.yml/badge.svg" alt="CI status">
+      <a class="plink" href="https://github.com/jarvisss007/dc-ml-trading/blob/main/paper/paper.pdf">paper.pdf</a>
+      <a class="plink" href="https://github.com/jarvisss007/dc-ml-trading">code &amp; data →</a>
+    </div>
+  </div>
+</section>
+
+<section id="explorer">
+  <h2>Explore the Hidden States</h2>
+  <p class="sub">This is my model running on 27 years of S&amp;P 500 data — a 3-state Gaussian HMM,
+  fitted by Baum–Welch, with each week coloured by its decoded hidden state. Hover to inspect;
+  the lower band is the smoothed probability of the turbulent state. The model was never told
+  what volatility is — it discovered these regimes, and the leverage effect, from raw returns alone.</p>
+  <div id="chartbox">
+    <div class="legend">
+      <span><span class="dot" style="background:var(--calm)"></span>calm</span>
+      <span><span class="dot" style="background:var(--normal)"></span>normal</span>
+      <span><span class="dot" style="background:var(--turb)"></span>turbulent</span>
+      <span style="margin-left:auto">S&amp;P 500, log scale · weekly · 1999–2026</span>
+    </div>
+    <canvas id="cv" height="430"></canvas>
+    <div class="statecards" id="cards"></div>
+    <p class="note">Interactive chart: vanilla JS, no libraries. Data exported directly from the paper&rsquo;s fitted model.</p>
+  </div>
+</section>
+
+<section>
+  <h2>Experience &amp; Background</h2>
+  <div class="grid2 xp">
+    <div>
+      <h3>FP&amp;A Analyst — GRD Trucking</h3>
+      <div class="meta">2026 – present</div>
+      <p>Financial planning, reporting, and cost analysis for a logistics operator.</p>
+    </div>
+    <div>
+      <h3>Financial Analyst — Friendly Franchisees</h3>
+      <div class="meta">Dec 2024 – Jan 2026</div>
+      <p>Led monthly FP&amp;A for a $100M+ multi-unit portfolio (60 units): forecasting, variance
+      analysis, lender &amp; covenant reporting, DSCR; contributed to a 12% EBITDA improvement.</p>
+    </div>
+    <div>
+      <h3>Portfolio Manager — Hylander Student Investment Fund</h3>
+      <div class="meta">UC Riverside · 2024</div>
+      <p>Co-managed ~$275K AUM (16.8% FY return); best-performing pitch +33%. Also doubled a $1M
+      StockTrak contest account in 8 weeks — then wrote the factor regression showing the doubling
+      was beta 7.5, not alpha. Honest evaluation is the brand.</p>
+    </div>
+    <div>
+      <h3>Education</h3>
+      <div class="meta">MS Finance, UC Riverside (2024) · B.E. Biomedical Engineering, BMSCE (2022)</div>
+      <p>Financial econometrics, options &amp; futures, fixed income, portfolio theory, risk management.
+      Two peer-reviewed publications in medical image analysis (2021).</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  Anupam Prabhugouda Patil · built with vanilla HTML/CSS/JS, hosted on GitHub Pages ·
+  <a href="https://github.com/jarvisss007/jarvisss007.github.io">source</a>
+</footer>
+
+</div>
+<div id="tip"></div>
+
+<script>
+(async function(){
+  const D = await (await fetch('regimes.json')).json();
+  const cv = document.getElementById('cv'), tip = document.getElementById('tip');
+  const COLORS = ['#2a9d8f','#e9c46a','#e76f51'];
+  const NAMES = ['calm','normal','turbulent'];
+  const n = D.px.length;
+  const lp = D.px.map(Math.log);
+  const lmin = Math.min(...lp), lmax = Math.max(...lp);
+
+  // state summary cards from model meta
+  const cards = document.getElementById('cards');
+  D.meta.mu_bp.forEach((mu, k) => {
+    cards.insertAdjacentHTML('beforeend',
+      `<div class="sc" style="border-left:3px solid ${COLORS[k]}"><b>${NAMES[k]}</b>
+       <span class="num">drift ${mu>0?'+':''}${mu} bp/day · vol ${D.meta.sig_ann[k]}% ann ·
+       lasts ~${Math.round(D.meta.dur[k])} days</span></div>`);
+  });
+
+  let W, H, dpr = window.devicePixelRatio || 1;
+  const PB = 90;           // bottom band height for P(turbulent)
+  const PAD = {l:54, r:12, t:10, b:26};
+
+  function resize(){
+    W = cv.clientWidth; H = 430;
+    cv.width = W*dpr; cv.height = H*dpr;
+    draw(-1);
+  }
+  const x = i => PAD.l + (W-PAD.l-PAD.r) * i/(n-1);
+  const y = v => PAD.t + (H-PB-PAD.t-PAD.b) * (1-(Math.log(v)-lmin)/(lmax-lmin));
+  const yp = v => H-PB-6 + (PB-14)*(1-v) + 14;
+
+  function draw(hi){
+    const c = cv.getContext('2d');
+    c.setTransform(dpr,0,0,dpr,0,0);
+    c.clearRect(0,0,W,H);
+    // gridlines + y labels (price)
+    c.font = '11px SF Mono, Menlo, monospace'; c.fillStyle = '#8b949e';
+    [1000,2000,4000,6000].forEach(v=>{
+      if (Math.log(v)<lmin||Math.log(v)>lmax) return;
+      c.strokeStyle = '#21262d'; c.beginPath();
+      c.moveTo(PAD.l, y(v)); c.lineTo(W-PAD.r, y(v)); c.stroke();
+      c.fillText(v.toLocaleString(), 8, y(v)+4);
+    });
+    // year ticks
+    let lastYr = '';
+    for (let i=0;i<n;i+=1){
+      const yr = D.dates[i].slice(0,4);
+      if (yr!==lastYr && +yr%4===3){ c.fillText(yr, x(i)-12, H-PB-10); lastYr=yr; }
+      else if (yr!==lastYr){ lastYr=yr; }
+    }
+    // price line coloured by state
+    for (let i=1;i<n;i++){
+      c.strokeStyle = COLORS[D.st[i]];
+      c.lineWidth = 1.8;
+      c.beginPath(); c.moveTo(x(i-1), y(D.px[i-1])); c.lineTo(x(i), y(D.px[i])); c.stroke();
+    }
+    // P(turbulent) band
+    c.fillStyle = '#8b949e'; c.fillText('P(turbulent)', 8, H-PB+8);
+    c.beginPath(); c.moveTo(x(0), yp(0));
+    for (let i=0;i<n;i++) c.lineTo(x(i), yp(D.pt[i]));
+    c.lineTo(x(n-1), yp(0)); c.closePath();
+    c.fillStyle = 'rgba(231,111,81,.35)'; c.fill();
+    // crosshair
+    if (hi>=0){
+      c.strokeStyle = '#8b949e55'; c.beginPath();
+      c.moveTo(x(hi), PAD.t); c.lineTo(x(hi), H-8); c.stroke();
+      c.fillStyle = COLORS[D.st[hi]];
+      c.beginPath(); c.arc(x(hi), y(D.px[hi]), 4, 0, 7); c.fill();
+    }
+  }
+
+  cv.addEventListener('mousemove', e=>{
+    const r = cv.getBoundingClientRect();
+    const i = Math.max(0, Math.min(n-1, Math.round((e.clientX-r.left-PAD.l)/(W-PAD.l-PAD.r)*(n-1))));
+    draw(i);
+    tip.style.display = 'block';
+    tip.style.left = (e.clientX+14)+'px'; tip.style.top = (e.clientY-10)+'px';
+    tip.innerHTML = `${D.dates[i]} · <b style="color:${COLORS[D.st[i]]}">${NAMES[D.st[i]]}</b><br>` +
+                    `S&amp;P 500: ${D.px[i].toLocaleString()}<br>P(turbulent): ${(D.pt[i]*100).toFixed(0)}%`;
+  });
+  cv.addEventListener('mouseleave', ()=>{ tip.style.display='none'; draw(-1); });
+  window.addEventListener('resize', resize);
+  resize();
+})();
+</script>
+</body>
+</html>
