@@ -90,6 +90,15 @@
     .reveal{opacity:1;transform:none;transition:none}
     #mc{display:none}
   }
+  .gbtn{border:1px solid var(--line);background:var(--panel);color:var(--text);padding:10px 22px;border-radius:8px;font-size:.95rem;font-weight:600;cursor:pointer;transition:all .15s}
+  .gbtn:hover:not(:disabled){border-color:var(--accent)}
+  .gbtn:disabled{opacity:.35;cursor:default}
+  .gbtn.on-long{background:#2a9d8f;border-color:#2a9d8f;color:#0d1117}
+  .gbtn.on-flat{background:#8b949e;border-color:#8b949e;color:#0d1117}
+  #g-result .verdict{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:0 10px 10px 0;padding:16px 20px;font-size:.97rem;margin-bottom:12px}
+  #g-result .gstats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}
+  #g-result .gs{border:1px solid var(--line);border-radius:8px;padding:10px 12px;text-align:center}
+  #g-result .gs .v{font:700 1.15rem var(--mono)} .gs .k{font-size:.72rem;color:var(--muted)}
   footer{padding:40px 0 60px;color:var(--muted);font-size:.85rem}
   .note{font-size:.8rem;color:var(--muted);margin-top:10px}
 </style>
@@ -100,6 +109,7 @@
   <a class="brand" href="#top">AP</a>
   <a href="#research">Papers</a>
   <a href="#explorer">Regime Explorer</a>
+  <a href="#game">🎮 The Game</a>
   <a href="#question">Research Question</a>
   <a href="#experience">Experience</a>
   <a href="#projects">Projects</a>
@@ -210,6 +220,32 @@
     <canvas id="cv" height="430"></canvas>
     <div class="statecards" id="cards"></div>
     <p class="note">Interactive chart: vanilla JS, no libraries. Data exported directly from the paper&rsquo;s fitted model.</p>
+  </div>
+</section>
+
+<section id="game" class="rv">
+  <h2>The Honest Evaluation Game</h2>
+  <p class="sub"><b style="color:var(--text)">Think you can beat the market? Prove it — then let my research judge you.</b>
+  You&rsquo;ll trade a hidden 18-month slice of real S&amp;P 500 history. The tape plays in real time;
+  toggle between <b style="color:var(--calm)">LONG</b> and <b style="color:var(--muted)">FLAT</b>
+  whenever you like (2&nbsp;bps cost per switch). When it ends, I run the same statistics on you that
+  my papers run on trading strategies: Sharpe ratio, excess return over buy-and-hold, and a
+  block-bootstrap significance test. Then I reveal <i>when</i> you were trading &mdash; and what my
+  model&rsquo;s hidden states knew about it.</p>
+  <div id="chartbox">
+    <div class="legend">
+      <span id="g-status">press start</span>
+      <span style="margin-left:auto" id="g-week"></span>
+    </div>
+    <canvas id="gcv" height="360"></canvas>
+    <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;align-items:center">
+      <button id="g-start" class="gbtn" style="background:var(--accent);color:#0d1117;border:none">▶ Start</button>
+      <button id="g-long" class="gbtn" disabled>📈 LONG</button>
+      <button id="g-flat" class="gbtn" disabled>⏸ FLAT</button>
+      <span id="g-pos" style="font-family:var(--mono);font-size:.85rem;color:var(--muted);margin-left:auto"></span>
+    </div>
+    <div id="g-result" style="display:none;margin-top:18px"></div>
+    <p class="note">Keyboard: <b>L</b> long · <b>F</b> flat. Real weekly S&amp;P 500 closes; window drawn at random from 1999–2026.</p>
   </div>
 </section>
 
@@ -531,6 +567,150 @@
   }
   reset(); addEventListener('resize', reset);
   requestAnimationFrame(frame);
+})();
+</script>
+<script>
+/* ---- The Honest Evaluation Game ---- */
+(async function(){
+  const D = await (await fetch('regimes.json')).json();
+  const N = 78;                       // 18 months of weeks
+  const COST = 4e-4;                  // 2 bps/side round switch
+  const TICK = 420;                   // ms per week
+  const COLORS = ['#2a9d8f','#e9c46a','#e76f51'];
+  const cv = document.getElementById('gcv'), c2 = cv.getContext('2d');
+  const $ = id => document.getElementById(id);
+  const btnS=$('g-start'), btnL=$('g-long'), btnF=$('g-flat');
+  let dpr = devicePixelRatio||1, W, Hc=360;
+  let g = null, timer = null;
+
+  function sizeCanvas(){ W = cv.clientWidth; cv.width=W*dpr; cv.height=Hc*dpr; }
+  sizeCanvas(); addEventListener('resize', ()=>{ sizeCanvas(); if(g) draw(); });
+
+  function newGame(){
+    const start = 4 + Math.floor(Math.random()*(D.px.length-N-8));
+    g = { start, w:0, pos:0, switches:0, eq:[1], bh:[1], posHist:[], done:false };
+    $('g-result').style.display='none';
+    btnL.disabled = btnF.disabled = false;
+    btnS.textContent = '↻ Restart';
+    setPos(0, true);
+    clearInterval(timer);
+    timer = setInterval(step, TICK);
+    $('g-status').textContent = 'trading a hidden slice of history…';
+    draw();
+  }
+  function setPos(p, silent){
+    if(!g || g.done) return;
+    if(!silent && p!==g.pos){ g.switches++; }
+    g.pos = p;
+    btnL.classList.toggle('on-long', p===1);
+    btnF.classList.toggle('on-flat', p===0);
+    $('g-pos').textContent = p===1 ? 'position: LONG' : 'position: FLAT (cash)';
+  }
+  function step(){
+    if(!g || g.done) return;
+    const i = g.start + g.w;
+    const r = D.px[i+1]/D.px[i] - 1;
+    let er = g.pos===1 ? r : 0;
+    if(g.posHist.length && g.posHist[g.posHist.length-1]!==g.pos) er -= COST;
+    g.posHist.push(g.pos);
+    g.eq.push(g.eq[g.eq.length-1]*(1+er));
+    g.bh.push(g.bh[g.bh.length-1]*(1+r));
+    g.w++;
+    $('g-week').textContent = `week ${g.w}/${N}`;
+    if(g.w>=N) finish(); else draw();
+  }
+  function draw(reveal){
+    c2.setTransform(dpr,0,0,dpr,0,0);
+    c2.clearRect(0,0,W,Hc);
+    const n = g.w+1, PAD={l:46,r:10,t:12,b:20};
+    const all = g.eq.concat(g.bh);
+    let lo = Math.min(...all)*.98, hi = Math.max(...all)*1.02;
+    const x = i => PAD.l + (W-PAD.l-PAD.r)*i/(N);
+    const y = v => PAD.t + (Hc-PAD.t-PAD.b)*(1-(v-lo)/(hi-lo));
+    c2.font='11px SF Mono,Menlo,monospace'; c2.fillStyle='#8b949e';
+    [0.8,1.0,1.2,1.5].forEach(v=>{ if(v<lo||v>hi) return;
+      c2.strokeStyle='#21262d'; c2.beginPath(); c2.moveTo(PAD.l,y(v)); c2.lineTo(W-PAD.r,y(v)); c2.stroke();
+      c2.fillText((v*100-100).toFixed(0)+'%', 6, y(v)+4); });
+    // buy-and-hold (muted) — coloured by regime on reveal
+    for(let i=1;i<n;i++){
+      c2.strokeStyle = reveal ? COLORS[D.st[g.start+i]] : '#8b949e';
+      c2.lineWidth = reveal ? 2 : 1.2;
+      c2.globalAlpha = reveal ? .95 : .6;
+      c2.beginPath(); c2.moveTo(x(i-1),y(g.bh[i-1])); c2.lineTo(x(i),y(g.bh[i])); c2.stroke();
+    }
+    c2.globalAlpha = 1;
+    // player equity
+    for(let i=1;i<n;i++){
+      c2.strokeStyle = g.posHist[i-1]===1 ? '#58a6ff' : '#58a6ff55';
+      c2.lineWidth=2.2;
+      c2.beginPath(); c2.moveTo(x(i-1),y(g.eq[i-1])); c2.lineTo(x(i),y(g.eq[i])); c2.stroke();
+    }
+    c2.fillStyle='#58a6ff'; c2.fillText('you', W-PAD.r-30, y(g.eq[n-1])-6);
+    c2.fillStyle='#8b949e'; c2.fillText('buy&hold', W-PAD.r-60, y(g.bh[n-1])+14);
+  }
+  function sharpe(rets){
+    const m = rets.reduce((a,b)=>a+b,0)/rets.length;
+    const s = Math.sqrt(rets.reduce((a,b)=>a+(b-m)*(b-m),0)/(rets.length-1));
+    return s>0 ? m/s*Math.sqrt(52) : 0;
+  }
+  function finish(){
+    g.done = true; clearInterval(timer);
+    btnL.disabled = btnF.disabled = true;
+    const yourRets=[], bhRets=[], diff=[];
+    for(let i=1;i<g.eq.length;i++){
+      yourRets.push(g.eq[i]/g.eq[i-1]-1);
+      bhRets.push(g.bh[i]/g.bh[i-1]-1);
+      diff.push(g.eq[i]/g.eq[i-1] - g.bh[i]/g.bh[i-1]);
+    }
+    // stationary block bootstrap p-value for mean(diff)<=0, block ~4 weeks
+    const n=diff.length, B=600; let cnt=0;
+    const obs = diff.reduce((a,b)=>a+b,0)/n;
+    for(let b=0;b<B;b++){
+      let s=0, i=Math.floor(Math.random()*n);
+      for(let k=0;k<n;k++){ s+=diff[i]; i = Math.random()<0.25 ? Math.floor(Math.random()*n) : (i+1)%n; }
+      if(s/n - obs >= obs) cnt++;
+    }
+    const p = cnt/B;
+    const you=(g.eq[g.eq.length-1]-1)*100, bh=(g.bh[g.bh.length-1]-1)*100;
+    const shY=sharpe(yourRets), shB=sharpe(bhRets);
+    const d0=D.dates[g.start], d1=D.dates[g.start+N];
+    const beat = you>bh;
+    const sig = beat && p<0.05;
+    let verdict;
+    if(sig) verdict = `<b>Statistically significant outperformance (p=${p.toFixed(2)}).</b>
+      Genuinely rare — my papers spend dozens of pages showing how seldom this survives honest testing.
+      If this wasn&rsquo;t luck, email me your resume.`;
+    else if(beat) verdict = `<b>You beat buy-and-hold — but the bootstrap says it&rsquo;s luck (p=${p.toFixed(2)}).</b>
+      Your edge is statistically indistinguishable from zero. This is the entire point of my research:
+      most &ldquo;winning&rdquo; strategies, including most published ones, are exactly this — noise that got lucky once.`;
+    else verdict = `<b>Buy-and-hold wins (you: ${you.toFixed(1)}% vs market: ${bh.toFixed(1)}%).</b>
+      Don&rsquo;t feel bad — after costs, most active strategies end here. The published ones just don&rsquo;t report it.
+      My first paper shows even machine-learning filters usually can&rsquo;t escape this fate.`;
+    $('g-status').textContent = `revealed: you were trading ${d0} → ${d1}`;
+    $('g-result').style.display='block';
+    $('g-result').innerHTML = `
+      <div class="gstats">
+        <div class="gs"><div class="v" style="color:#58a6ff">${you>=0?'+':''}${you.toFixed(1)}%</div><div class="k">your return</div></div>
+        <div class="gs"><div class="v">${bh>=0?'+':''}${bh.toFixed(1)}%</div><div class="k">buy &amp; hold</div></div>
+        <div class="gs"><div class="v">${shY.toFixed(2)}</div><div class="k">your Sharpe</div></div>
+        <div class="gs"><div class="v">${shB.toFixed(2)}</div><div class="k">B&amp;H Sharpe</div></div>
+        <div class="gs"><div class="v">${g.switches}</div><div class="k">switches</div></div>
+        <div class="gs"><div class="v">${p.toFixed(2)}</div><div class="k">bootstrap p-value</div></div>
+      </div>
+      <div class="verdict" style="margin-top:12px">${verdict}<br><br>
+      <span style="color:var(--muted);font-size:.88rem">The chart now shows the market line coloured by my
+      HMM&rsquo;s hidden states for the period you just traded — teal calm, yellow normal, red turbulent.
+      Would knowing the regime have helped? That&rsquo;s <a href="#research">the paper</a>.</span></div>`;
+    draw(true);
+  }
+  btnS.onclick = newGame;
+  btnL.onclick = ()=>setPos(1);
+  btnF.onclick = ()=>setPos(0);
+  addEventListener('keydown', e=>{
+    if(!g || g.done) return;
+    if(e.key==='l'||e.key==='L') setPos(1);
+    if(e.key==='f'||e.key==='F') setPos(0);
+  });
 })();
 </script>
 </body>
