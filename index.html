@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Anupam Patil — Quantitative Finance Research</title>
-<meta name="description" content="FP&A analyst and quantitative finance researcher. Two working papers on honest out-of-sample evaluation: directional-change ML strategies and hidden Markov regime models.">
+<title>Anupam Patil — Quantitative Finance Research & FP&A</title>
+<meta name="description" content="FP&A analyst and quantitative finance researcher. Two working papers, four publications, an interactive hidden-Markov regime explorer, and a track record of honest evaluation.">
 <style>
   :root{
     --bg:#0d1117; --panel:#161b22; --line:#21262d; --text:#e6edf3;
@@ -12,52 +12,87 @@
     --turb:#e76f51; --mono:'SF Mono',ui-monospace,Menlo,Consolas,monospace;
   }
   *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
   body{background:var(--bg);color:var(--text);font:16px/1.65 -apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif}
   a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
-  .wrap{max-width:880px;margin:0 auto;padding:0 24px}
-  header{padding:88px 0 56px;border-bottom:1px solid var(--line)}
-  h1{font-size:2.3rem;font-weight:700;letter-spacing:-.02em}
-  .tagline{font-size:1.25rem;color:var(--muted);margin-top:10px;max-width:620px}
+  .wrap{max-width:920px;margin:0 auto;padding:0 24px}
+  nav{position:sticky;top:0;background:#0d1117ee;backdrop-filter:blur(8px);border-bottom:1px solid var(--line);z-index:20}
+  nav .wrap{display:flex;gap:4px;overflow-x:auto;padding:0 24px}
+  nav a{padding:13px 13px;font-size:.86rem;color:var(--muted);white-space:nowrap}
+  nav a:hover{color:var(--text);text-decoration:none}
+  nav a.brand{color:var(--text);font-weight:700;margin-right:auto}
+  header{padding:72px 0 48px;border-bottom:1px solid var(--line)}
+  h1{font-size:2.4rem;font-weight:700;letter-spacing:-.02em}
+  .tagline{font-size:1.22rem;color:var(--muted);margin-top:10px;max-width:680px}
   .tagline b{color:var(--text);font-weight:600}
-  .links{margin-top:26px;display:flex;gap:14px;flex-wrap:wrap}
+  .headline{margin-top:14px;font-family:var(--mono);font-size:.83rem;color:var(--muted)}
+  .links{margin-top:24px;display:flex;gap:12px;flex-wrap:wrap}
   .links a{border:1px solid var(--line);background:var(--panel);padding:8px 16px;border-radius:8px;font-size:.92rem;color:var(--text)}
   .links a:hover{border-color:var(--accent);text-decoration:none;color:var(--accent)}
-  section{padding:52px 0;border-bottom:1px solid var(--line)}
-  h2{font-size:1.5rem;margin-bottom:8px;letter-spacing:-.01em}
-  .sub{color:var(--muted);margin-bottom:28px}
-  .paper{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:26px;margin-bottom:22px}
-  .paper h3{font-size:1.12rem;line-height:1.45;margin-bottom:6px}
-  .paper .meta{font-size:.85rem;color:var(--muted);font-family:var(--mono);margin-bottom:12px}
-  .paper p{color:#c9d1d9;font-size:.95rem}
-  .finding{margin-top:12px;padding:12px 16px;border-left:3px solid var(--accent);background:rgba(88,166,255,.06);border-radius:0 8px 8px 0;font-size:.93rem}
-  .badges{margin-top:14px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  section{padding:48px 0;border-bottom:1px solid var(--line)}
+  h2{font-size:1.45rem;margin-bottom:8px;letter-spacing:-.01em}
+  h2 .anchor{color:var(--line)}
+  .sub{color:var(--muted);margin-bottom:26px;max-width:720px}
+  .paper,.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:24px;margin-bottom:18px}
+  .paper h3,.card h3{font-size:1.1rem;line-height:1.45;margin-bottom:6px}
+  .meta{font-size:.84rem;color:var(--muted);font-family:var(--mono);margin-bottom:10px}
+  .paper p,.card p{color:#c9d1d9;font-size:.95rem}
+  .finding{margin-top:12px;padding:11px 16px;border-left:3px solid var(--accent);background:rgba(88,166,255,.06);border-radius:0 8px 8px 0;font-size:.93rem}
+  .badges{margin-top:13px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
   .badges img{height:20px}
   .plink{font-size:.9rem;font-family:var(--mono)}
+  ul.b{margin:8px 0 0 18px}
+  ul.b li{font-size:.93rem;color:#c9d1d9;margin-bottom:6px}
   #chartbox{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:22px}
   #chartbox .legend{display:flex;gap:18px;font-size:.82rem;color:var(--muted);margin-bottom:10px;flex-wrap:wrap;font-family:var(--mono)}
   .dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:-1px}
   canvas{width:100%;display:block;cursor:crosshair}
-  #tip{position:fixed;pointer-events:none;background:#000c;border:1px solid var(--line);border-radius:8px;padding:8px 12px;font-size:.8rem;font-family:var(--mono);display:none;z-index:10;backdrop-filter:blur(4px)}
+  #tip{position:fixed;pointer-events:none;background:#000c;border:1px solid var(--line);border-radius:8px;padding:8px 12px;font-size:.8rem;font-family:var(--mono);display:none;z-index:30;backdrop-filter:blur(4px)}
   .statecards{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-top:16px}
-  .sc{border:1px solid var(--line);border-radius:10px;padding:14px 16px;font-size:.85rem}
-  .sc b{display:block;font-size:.95rem;margin-bottom:4px}
+  .sc{border:1px solid var(--line);border-radius:10px;padding:13px 16px;font-size:.85rem}
+  .sc b{display:block;font-size:.95rem;margin-bottom:3px}
   .sc .num{font-family:var(--mono);color:var(--muted)}
-  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  .grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
   @media(max-width:640px){.grid2{grid-template-columns:1fr}}
-  .xp h3{font-size:1rem} .xp .meta{font-size:.83rem;color:var(--muted);font-family:var(--mono);margin-bottom:6px}
-  .xp p{font-size:.92rem;color:#c9d1d9}
-  .xp>div{margin-bottom:22px}
+  .pub{padding:16px 20px;border:1px solid var(--line);border-radius:10px;margin-bottom:12px}
+  .pub h3{font-size:.98rem;margin-bottom:2px}
+  .pub .meta{margin-bottom:4px}
+  .pub p{font-size:.88rem;color:var(--muted)}
+  .skillrow{margin-bottom:14px}
+  .skillrow b{font-size:.92rem}
+  .tags{margin-top:6px;display:flex;flex-wrap:wrap;gap:7px}
+  .tag{border:1px solid var(--line);background:var(--panel);border-radius:20px;padding:3px 12px;font-size:.8rem;color:#c9d1d9;font-family:var(--mono)}
+  .repo{border:1px solid var(--line);border-radius:10px;padding:16px 18px}
+  .repo h3{font-size:.95rem;margin-bottom:4px}
+  .repo p{font-size:.86rem;color:var(--muted)}
+  .q{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--turb);border-radius:12px;padding:22px 26px;font-size:1.02rem;color:#c9d1d9}
   footer{padding:40px 0 60px;color:var(--muted);font-size:.85rem}
   .note{font-size:.8rem;color:var(--muted);margin-top:10px}
 </style>
 </head>
 <body>
-<div class="wrap">
+
+<nav><div class="wrap">
+  <a class="brand" href="#top">AP</a>
+  <a href="#research">Papers</a>
+  <a href="#explorer">Regime Explorer</a>
+  <a href="#question">Research Question</a>
+  <a href="#experience">Experience</a>
+  <a href="#projects">Projects</a>
+  <a href="#publications">Publications</a>
+  <a href="#education">Education</a>
+  <a href="#skills">Skills</a>
+</div></nav>
+
+<div class="wrap" id="top">
 
 <header>
-  <h1>Anupam Patil</h1>
+  <h1>Anupam Prabhugouda Patil</h1>
   <p class="tagline">FP&amp;A analyst &amp; quantitative finance researcher. I test whether popular
   quant ideas survive <b>honest out-of-sample evaluation</b> — and publish the code either way.</p>
+  <p class="headline">FP&amp;A @ GRD Trucking · MS Finance, UC Riverside · 4 publications ·
+  open to FP&amp;A, market-risk &amp; model-validation roles — USA · Singapore · HK · UAE · India</p>
   <div class="links">
     <a href="https://github.com/jarvisss007">GitHub</a>
     <a href="https://www.linkedin.com/in/anupam-p-patil">LinkedIn</a>
@@ -67,7 +102,12 @@
 
 <section id="research">
   <h2>Working Papers</h2>
-  <p class="sub">Every number reproduces from public data with one command; automated tests re-verify the papers&rsquo; results on every commit.</p>
+  <p class="sub">My research agenda is the honest out-of-sample evaluation of quantitative finance
+  claims: the field produces models faster than it validates them, and the backtest-overfitting
+  literature shows why most published edges are artifacts. I build the evaluation machinery —
+  walk-forward protocols, forecast-comparison tests, tail-risk backtests — and apply it to claims
+  that matter. Every number below reproduces from public data with one command; automated tests
+  re-verify the papers&rsquo; results on every commit.</p>
 
   <div class="paper">
     <h3>Do Hidden Markov Regimes Add Out-of-Sample Value?<br>
@@ -75,13 +115,16 @@
     <div class="meta">2026 · 7 models · S&amp;P 500, NASDAQ 1999–2026 · WTI 1986–2026 · 5,600–8,900 OOS days incl. 2008 &amp; COVID</div>
     <p>Implemented Gaussian and Student-t hidden Markov models from scratch (Baum–Welch, Viterbi,
     online filtering) — the mathematics Renaissance Technologies was founded on — and fielded them
-    against GARCH-Normal/t, EWMA, and simpler baselines across three scoring dimensions: point
-    forecasts (QLIKE, Diebold–Mariano, model confidence sets), predictive densities (log score,
-    Berkowitz), and tail risk (multi-level VaR with Kupiec/Christoffersen backtests, expected-shortfall calibration).</p>
-    <div class="finding"><b>Finding:</b> fat tails — not hidden states — repair VaR/ES calibration.
+    against GARCH-Normal/t, EWMA, and simpler baselines across three scoring dimensions: variance
+    point forecasts (QLIKE, Diebold–Mariano, Hansen–Lunde–Nason model confidence sets), predictive
+    densities (log score, Berkowitz), and tail risk (VaR at 1/2.5/5% with Kupiec &amp; Christoffersen
+    backtests; expected-shortfall calibration), plus crisis-window analysis and a state-count sweep.</p>
+    <div class="finding"><b>Finding:</b> fat tails — not hidden states — repair VaR/ES calibration
+    (the Student-t HMM and GARCH-t are the only calibrated pair; every Gaussian model over-breaches).
     Recursive variance, not regime discreteness, provides crisis adaptivity: HMM volatility ceilings
-    estimated on pre-crisis history failed in 2008. Hidden states earn their keep <i>descriptively</i>,
-    discovering the leverage effect unsupervised.</div>
+    estimated on pre-crisis history breached a 1% VaR on 7–8% of days in late 2008 while GARCH-t
+    breached 1.2%. Hidden states earn their keep <i>descriptively</i> — discovering the leverage
+    effect unsupervised.</div>
     <div class="badges">
       <img src="https://github.com/jarvisss007/regime-monte-carlo/actions/workflows/ci.yml/badge.svg" alt="CI status">
       <a class="plink" href="https://github.com/jarvisss007/regime-monte-carlo/blob/main/paper/hmm_paper.pdf">paper.pdf</a>
@@ -94,15 +137,27 @@
     <span style="font-weight:400;font-size:.95rem;color:var(--muted)">A cautionary study across equities and commodities</span></h3>
     <div class="meta">2026 · walk-forward + transaction costs + block-bootstrap inference · 3 asset classes, 20–33 years</div>
     <p>Reproduced a published event-based trading strategy and subjected it to the discipline of the
-    backtest-overfitting literature. The naive rule is strongly loss-making after costs; an ML filter
-    rescues it but never generates statistically significant excess returns over buy-and-hold.</p>
-    <div class="finding"><b>Finding:</b> an honest null. The strategy&rsquo;s published edge is an artifact
-    of weak evaluation; its one robust benefit is a roughly halved maximum drawdown.</div>
+    backtest-overfitting literature: expanding-window walk-forward evaluation, realistic transaction
+    costs, and stationary block-bootstrap significance tests. The naive trade-every-event rule is
+    strongly loss-making after costs; an ML filter rescues it but never generates statistically
+    significant excess returns over buy-and-hold.</p>
+    <div class="finding"><b>Finding:</b> an honest null. The strategy&rsquo;s published edge is an
+    artifact of weak evaluation; its one robust benefit is a roughly halved maximum drawdown.
+    Rigorous null results, transparently established, are genuine contributions.</div>
     <div class="badges">
       <img src="https://github.com/jarvisss007/dc-ml-trading/actions/workflows/ci.yml/badge.svg" alt="CI status">
       <a class="plink" href="https://github.com/jarvisss007/dc-ml-trading/blob/main/paper/paper.pdf">paper.pdf</a>
       <a class="plink" href="https://github.com/jarvisss007/dc-ml-trading">code &amp; data →</a>
     </div>
+  </div>
+
+  <div class="card">
+    <h3>Method as identity: reproducibility as a first-class result</h3>
+    <p>Every estimator in both papers is implemented from first principles and validated on synthetic
+    data with known properties (known hidden paths, known GARCH dynamics, known quantile coverage)
+    before touching markets. Every number regenerates from public data with one command, and a
+    continuous-integration test suite re-verifies the papers&rsquo; anchor results on every commit —
+    the green badges above are live. Results that cannot be re-derived are claims, not findings.</p>
   </div>
 </section>
 
@@ -111,7 +166,8 @@
   <p class="sub">This is my model running on 27 years of S&amp;P 500 data — a 3-state Gaussian HMM,
   fitted by Baum–Welch, with each week coloured by its decoded hidden state. Hover to inspect;
   the lower band is the smoothed probability of the turbulent state. The model was never told
-  what volatility is — it discovered these regimes, and the leverage effect, from raw returns alone.</p>
+  what volatility is — it discovered these regimes, and the leverage effect (calm markets drift up,
+  turbulent markets crash down), from raw returns alone.</p>
   <div id="chartbox">
     <div class="legend">
       <span><span class="dot" style="background:var(--calm)"></span>calm</span>
@@ -125,38 +181,152 @@
   </div>
 </section>
 
-<section>
-  <h2>Experience &amp; Background</h2>
-  <div class="grid2 xp">
-    <div>
-      <h3>FP&amp;A Analyst — GRD Trucking</h3>
-      <div class="meta">2026 – present</div>
-      <p>Financial planning, reporting, and cost analysis for a logistics operator.</p>
+<section id="question">
+  <h2>The Question I Want to Pursue in a PhD</h2>
+  <div class="q">
+    My results establish two complementary failure modes: mixture models achieve calibrated tails but
+    their state ceilings break under unprecedented stress; recursions adapt instantly but thin tails
+    fail extreme-quantile risk everywhere. The natural hybrid — <b>regime-switching GARCH</b>,
+    persistent hidden states with within-state adaptive variance — has never been put through this
+    evaluation gauntlet.
+    <b>Can it deliver correctly calibrated tail risk through unprecedented crises, out of sample?</b>
+    More broadly: when does model sophistication genuinely improve out-of-sample risk measurement —
+    and how do we detect when it does not?
+  </div>
+</section>
+
+<section id="experience">
+  <h2>Experience</h2>
+  <div class="card">
+    <h3>FP&amp;A Analyst — GRD Trucking</h3>
+    <div class="meta">2026 – present · logistics</div>
+    <p>Financial planning, reporting, and cost analysis for a trucking &amp; logistics operator.</p>
+  </div>
+  <div class="card">
+    <h3>Financial Analyst — Friendly Franchisees LLC</h3>
+    <div class="meta">Dec 2024 – Jan 2026 · La Palma, CA · $100M+ multi-unit QSR portfolio</div>
+    <ul class="b">
+      <li>Led monthly FP&amp;A reporting across 60 operating units — revenue trends, cost structure, operating-margin performance.</li>
+      <li>Prepared monthly and quarterly reporting packages: variance analysis, KPI dashboards, executive summaries for senior leadership.</li>
+      <li>Developed forecasting and budgeting models incorporating operational metrics, improving planning accuracy.</li>
+      <li>Supported lender reporting, covenant-compliance monitoring, and DSCR analysis for refinancing and acquisition transactions.</li>
+      <li>Contributed to a 12% EBITDA improvement through cost tracking, labor-efficiency analysis, and benchmarking.</li>
+    </ul>
+  </div>
+  <div class="grid2">
+    <div class="card">
+      <h3>Real Estate Analyst Intern — Silverstar Real Estate</h3>
+      <div class="meta">Jul – Sep 2024 · La Palma, CA</div>
+      <ul class="b">
+        <li>Built DCF and scenario models for acquisitions across a $30M+ portfolio.</li>
+        <li>Sensitivity and downside-risk analysis under changing market conditions.</li>
+      </ul>
     </div>
-    <div>
-      <h3>Financial Analyst — Friendly Franchisees</h3>
-      <div class="meta">Dec 2024 – Jan 2026</div>
-      <p>Led monthly FP&amp;A for a $100M+ multi-unit portfolio (60 units): forecasting, variance
-      analysis, lender &amp; covenant reporting, DSCR; contributed to a 12% EBITDA improvement.</p>
-    </div>
-    <div>
+    <div class="card">
       <h3>Portfolio Manager — Hylander Student Investment Fund</h3>
-      <div class="meta">UC Riverside · 2024</div>
-      <p>Co-managed ~$275K AUM (16.8% FY return); best-performing pitch +33%. Also doubled a $1M
-      StockTrak contest account in 8 weeks — then wrote the factor regression showing the doubling
-      was beta 7.5, not alpha. Honest evaluation is the brand.</p>
+      <div class="meta">Sep – Dec 2024 · UC Riverside · ~$275K AUM</div>
+      <ul class="b">
+        <li>Co-managed the fund to a 16.8% FY return; directly managed a $28.5K industrial-sector allocation.</li>
+        <li>Pitched Howmet Aerospace (HWM): +33%, the fund&rsquo;s best performer.</li>
+      </ul>
     </div>
-    <div>
-      <h3>Education</h3>
-      <div class="meta">MS Finance, UC Riverside (2024) · B.E. Biomedical Engineering, BMSCE (2022)</div>
-      <p>Financial econometrics, options &amp; futures, fixed income, portfolio theory, risk management.
-      Two peer-reviewed publications in medical image analysis (2021).</p>
+  </div>
+  <div class="card">
+    <h3>Chief Financial Officer — International Collegiate Business Strategy Competition</h3>
+    <div class="meta">Dec 2023 – Apr 2024 · UCR team</div>
+    <p>Led financial strategy; placed <b>1st in the presentation category</b>.</p>
+  </div>
+</section>
+
+<section id="projects">
+  <h2>Projects &amp; Code</h2>
+  <p class="sub">Everything public, at <a href="https://github.com/jarvisss007">github.com/jarvisss007</a>.</p>
+  <div class="grid3">
+    <div class="repo"><h3><a href="https://github.com/jarvisss007/regime-monte-carlo">regime-monte-carlo</a></h3>
+      <p>From-scratch HMMs (Gaussian &amp; Student-t), GARCH benchmarks, regime-switching Monte Carlo,
+      full tail-risk evaluation toolkit. 20 CI-verified tests. Home of working paper #2.</p></div>
+    <div class="repo"><h3><a href="https://github.com/jarvisss007/dc-ml-trading">dc-ml-trading</a></h3>
+      <p>Directional-change event engine, walk-forward ML backtester, block-bootstrap inference.
+      Home of working paper #1. MIT licensed, citable (CITATION.cff).</p></div>
+    <div class="repo"><h3><a href="https://github.com/jarvisss007/Investment-and-portfolio-project">StockTrak post-mortem</a></h3>
+      <p>Doubled a $1M simulated portfolio in 8 weeks (+109%) — then wrote the CAPM/Carhart regression
+      showing it was beta 7.5, not alpha. Honest evaluation is the brand.</p></div>
+    <div class="repo"><h3><a href="https://github.com/jarvisss007/Option-analysis">Option-analysis</a></h3>
+      <p>Options analytics pipeline: chain data, Black-Scholes Greeks, ML classification, backtests (2024).</p></div>
+    <div class="repo"><h3><a href="https://github.com/jarvisss007/Stock-analysis">Stock-analysis</a></h3>
+      <p>Early equity-trading experiments: features, ML, PPO reinforcement learning (2024).</p></div>
+    <div class="repo"><h3><a href="https://github.com/jarvisss007/jarvisss007.github.io">this site</a></h3>
+      <p>Vanilla HTML/CSS/JS, no frameworks; the regime explorer renders my paper&rsquo;s fitted model.</p></div>
+  </div>
+</section>
+
+<section id="publications">
+  <h2>Publications</h2>
+  <div class="pub">
+    <h3>Do Hidden Markov Regimes Add Out-of-Sample Value? Separating Fat Tails from Hidden States</h3>
+    <div class="meta">Working paper · Jul 2026 · <a href="https://github.com/jarvisss007/regime-monte-carlo">repo</a></div>
+    <p>7 models × 3 assets × 3 scoring rules; Kupiec/Christoffersen/Berkowitz backtests, model confidence sets, crisis windows.</p>
+  </div>
+  <div class="pub">
+    <h3>Do Machine-Learning Filters on Directional-Change Events Survive Out-of-Sample? A Cautionary Study</h3>
+    <div class="meta">Working paper · Jul 2026 · <a href="https://github.com/jarvisss007/dc-ml-trading">repo</a></div>
+    <p>Walk-forward, transaction costs, stationary block-bootstrap inference; a reproducible null.</p>
+  </div>
+  <div class="pub">
+    <h3>A New Computerized Method of Detecting Leukemia</h3>
+    <div class="meta">Turkish Online Journal of Qualitative Inquiry · Nov 2021 · co-authored</div>
+    <p>Classification of leukemia types from microscopic blood-cell images.</p>
+  </div>
+  <div class="pub">
+    <h3>An Automated Detection of Leukemia</h3>
+    <div class="meta">IJRASET · Aug 2021 · co-authored</div>
+    <p>Early-stage disease detection via image analysis of blood samples.</p>
+  </div>
+</section>
+
+<section id="education">
+  <h2>Education</h2>
+  <div class="grid2">
+    <div class="card">
+      <h3>Master&rsquo;s in Finance — University of California, Riverside</h3>
+      <div class="meta">Sep 2023 – Dec 2024</div>
+      <p>Financial econometrics, quantitative finance, options &amp; futures, fixed-income securities,
+      portfolio theory, risk management.</p>
+    </div>
+    <div class="card">
+      <h3>B.E., Biomedical Engineering — B.M.S. College of Engineering</h3>
+      <div class="meta">Sep 2018 – Aug 2022 · Bangalore, India · CGPA 8.08/10</div>
+      <p>Applied mathematics, programming, signal processing; Operations Research elective (93/100)
+      sparked the turn toward quantitative methods.</p>
     </div>
   </div>
 </section>
 
+<section id="skills">
+  <h2>Skills &amp; Certifications</h2>
+  <div class="skillrow"><b>Quantitative research</b>
+    <div class="tags"><span class="tag">Baum–Welch / HMM (from scratch)</span><span class="tag">GARCH MLE</span>
+    <span class="tag">VaR/ES backtesting</span><span class="tag">Kupiec · Christoffersen · Berkowitz</span>
+    <span class="tag">Diebold–Mariano</span><span class="tag">Model Confidence Sets</span>
+    <span class="tag">block bootstrap</span><span class="tag">walk-forward evaluation</span></div></div>
+  <div class="skillrow"><b>Programming &amp; data</b>
+    <div class="tags"><span class="tag">Python (pandas, scikit-learn, scipy)</span><span class="tag">SQL</span>
+    <span class="tag">C++</span><span class="tag">pytest &amp; GitHub Actions CI</span><span class="tag">LaTeX</span>
+    <span class="tag">advanced Excel</span></div></div>
+  <div class="skillrow"><b>FP&amp;A</b>
+    <div class="tags"><span class="tag">budgeting &amp; forecasting</span><span class="tag">variance analysis</span>
+    <span class="tag">KPI dashboards</span><span class="tag">lender &amp; covenant reporting</span>
+    <span class="tag">DSCR analysis</span></div></div>
+  <div class="skillrow"><b>Tools &amp; certifications</b>
+    <div class="tags"><span class="tag">Capital IQ</span><span class="tag">Bloomberg Terminal</span>
+    <span class="tag">Akuna Capital Options 101</span></div></div>
+</section>
+
 <footer>
-  Anupam Prabhugouda Patil · built with vanilla HTML/CSS/JS, hosted on GitHub Pages ·
+  Anupam Prabhugouda Patil · <a href="mailto:apati077@ucr.edu">apati077@ucr.edu</a> ·
+  <a href="https://github.com/jarvisss007">GitHub</a> ·
+  <a href="https://www.linkedin.com/in/anupam-p-patil">LinkedIn</a><br>
+  Built with vanilla HTML/CSS/JS, hosted on GitHub Pages ·
   <a href="https://github.com/jarvisss007/jarvisss007.github.io">source</a>
 </footer>
 
@@ -173,7 +343,6 @@
   const lp = D.px.map(Math.log);
   const lmin = Math.min(...lp), lmax = Math.max(...lp);
 
-  // state summary cards from model meta
   const cards = document.getElementById('cards');
   D.meta.mu_bp.forEach((mu, k) => {
     cards.insertAdjacentHTML('beforeend',
@@ -183,7 +352,7 @@
   });
 
   let W, H, dpr = window.devicePixelRatio || 1;
-  const PB = 90;           // bottom band height for P(turbulent)
+  const PB = 90;
   const PAD = {l:54, r:12, t:10, b:26};
 
   function resize(){
@@ -199,7 +368,6 @@
     const c = cv.getContext('2d');
     c.setTransform(dpr,0,0,dpr,0,0);
     c.clearRect(0,0,W,H);
-    // gridlines + y labels (price)
     c.font = '11px SF Mono, Menlo, monospace'; c.fillStyle = '#8b949e';
     [1000,2000,4000,6000].forEach(v=>{
       if (Math.log(v)<lmin||Math.log(v)>lmax) return;
@@ -207,26 +375,22 @@
       c.moveTo(PAD.l, y(v)); c.lineTo(W-PAD.r, y(v)); c.stroke();
       c.fillText(v.toLocaleString(), 8, y(v)+4);
     });
-    // year ticks
     let lastYr = '';
     for (let i=0;i<n;i+=1){
       const yr = D.dates[i].slice(0,4);
       if (yr!==lastYr && +yr%4===3){ c.fillText(yr, x(i)-12, H-PB-10); lastYr=yr; }
       else if (yr!==lastYr){ lastYr=yr; }
     }
-    // price line coloured by state
     for (let i=1;i<n;i++){
       c.strokeStyle = COLORS[D.st[i]];
       c.lineWidth = 1.8;
       c.beginPath(); c.moveTo(x(i-1), y(D.px[i-1])); c.lineTo(x(i), y(D.px[i])); c.stroke();
     }
-    // P(turbulent) band
     c.fillStyle = '#8b949e'; c.fillText('P(turbulent)', 8, H-PB+8);
     c.beginPath(); c.moveTo(x(0), yp(0));
     for (let i=0;i<n;i++) c.lineTo(x(i), yp(D.pt[i]));
     c.lineTo(x(n-1), yp(0)); c.closePath();
     c.fillStyle = 'rgba(231,111,81,.35)'; c.fill();
-    // crosshair
     if (hi>=0){
       c.strokeStyle = '#8b949e55'; c.beginPath();
       c.moveTo(x(hi), PAD.t); c.lineTo(x(hi), H-8); c.stroke();
