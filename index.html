@@ -314,6 +314,14 @@
       against the registry and flags unregistered strategies as mining violations.</p>
       <div class="badges"><span class="plink"><a href="https://github.com/jarvisss007/strategy-lab/blob/main/REGISTRY.md">registry</a> · <a href="https://github.com/jarvisss007/strategy-lab/blob/main/reports/arena_trades.csv">live blotter</a></span></div>
     </div>
+    <div class="card" style="grid-column:1/-1">
+      <h3>The forward record, drawn from the committed blotter</h3>
+      <img src="arena_record.svg" alt="Arena forward record: cumulative excess vs SPY and per-rule averages" style="width:100%;margin-top:8px">
+      <p class="note">Regenerated from <a href="https://github.com/jarvisss007/strategy-lab/blob/main/reports/arena_trades.csv">reports/arena_trades.csv</a> —
+      equal-weight paper units, not capital returns. Honest caveats apply and are in the paper: few independent
+      entry days, a survivorship-tilted universe, and a mean-reversion family the 15-year backtest already
+      convicted. The forward record decides; this is it accruing in public.</p>
+    </div>
     <div class="card">
       <h3>Self-scoring forecast ledgers</h3>
       <p>Every research agent must file probabilistic forecasts, which are scored later with Brier
@@ -321,6 +329,14 @@
       The crypto forecaster and seismic module below are public examples: each keeps a scoreboard
       against a naive baseline and shows it, including when the honest answer is &ldquo;no edge.&rdquo;</p>
       <div class="badges"><span class="plink"><a href="https://jarvisss007.github.io/crypto-microstructure/forecast.html">crypto ↗</a> · <a href="https://jarvisss007.github.io/live-events-tracker/">seismic ↗</a></span></div>
+    </div>
+    <div class="card">
+      <h3>Case study: one wrong price <a href="qbts-case-study.html">→ read it</a></h3>
+      <p>My own book recorded QBTS at a price it hadn&rsquo;t traded at for weeks — every one of ~50
+      automated checks was green. The write-up covers the diagnosis (a stale feed fossilizing into a
+      permanent record), the correction that violated my own audit rule, and the structural fixes,
+      each proven by breaking it first. The most FDE-shaped thing I&rsquo;ve written.</p>
+      <div class="badges"><span class="plink"><a href="qbts-case-study.html">full case study →</a></span></div>
     </div>
     <div class="card">
       <h3>Input-integrity tooling</h3>

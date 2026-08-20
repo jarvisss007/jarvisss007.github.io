@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Case Study: One Wrong Price — Anupam Patil</title>
+<meta name="description" content="A data-engineering case study from my autonomous paper-trading research desk: a stale feed fossilized wrong prices into a permanent record, and what a system should do about it.">
+<style>
+  :root{
+    --bg:#0d1117; --panel:#161b22; --line:#21262d; --text:#e6edf3;
+    --muted:#8b949e; --accent:#58a6ff; --turb:#e76f51;
+    --mono:'SF Mono',ui-monospace,Menlo,Consolas,monospace;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--text);font:16px/1.7 -apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif}
+  a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+  .wrap{max-width:760px;margin:0 auto;padding:0 24px 80px}
+  nav{position:sticky;top:0;background:#0d1117ee;backdrop-filter:blur(8px);border-bottom:1px solid var(--line);z-index:20}
+  nav .wrap{display:flex;gap:16px;padding:13px 24px}
+  nav a{font-size:.88rem;color:var(--muted)} nav a.brand{color:var(--text);font-weight:700}
+  header{padding:56px 0 8px}
+  h1{font-size:1.9rem;line-height:1.3;letter-spacing:-.02em}
+  .byline{color:var(--muted);font-family:var(--mono);font-size:.82rem;margin-top:14px}
+  .disclaimer{margin-top:14px;padding:10px 16px;border-left:3px solid var(--turb);background:rgba(231,111,81,.07);border-radius:0 8px 8px 0;font-size:.9rem;color:#c9d1d9}
+  h2{font-size:1.25rem;margin:44px 0 12px;letter-spacing:-.01em}
+  p{margin-bottom:14px;color:#c9d1d9}
+  ul,ol{margin:0 0 14px 22px;color:#c9d1d9}
+  li{margin-bottom:8px}
+  b{color:var(--text)}
+  .pull{margin:24px 0;padding:18px 22px;background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:0 10px 10px 0;font-size:1.05rem;color:var(--text)}
+  code{font-family:var(--mono);font-size:.86em;background:var(--panel);border:1px solid var(--line);border-radius:5px;padding:1px 6px}
+  footer{border-top:1px solid var(--line);margin-top:56px;padding-top:20px;color:var(--muted);font-size:.85rem}
+</style>
+</head>
+<body>
+<nav><div class="wrap">
+  <a class="brand" href="index.html">AP</a>
+  <a href="index.html#desk">← AI Research Desk</a>
+  <a href="index.html#research">Papers</a>
+</div></nav>
+
+<div class="wrap">
+<header>
+  <h1>Case study: one wrong price, and what a system should do about it</h1>
+  <p class="byline">Anupam Patil · autonomous paper-trading research desk · August 2026</p>
+  <p class="disclaimer">All positions are paper. The subject of this case study is data engineering
+  and process — not returns, and not investment advice.</p>
+</header>
+
+<h2>The observation (a human, reading his own page)</h2>
+<p>On August 14, reviewing my paper portfolio, one row stopped me: QBTS recorded as
+<i>bought yesterday at $16.21</i> — a price I remembered from weeks earlier. The stock
+had traded above $20 for days. No alert had fired. The desk ran ~50 automated
+checks at the time; every one was green.</p>
+
+<h2>The diagnosis (mechanism, not blame)</h2>
+<p>The recorded fills were real closes <b>from earlier bars, stamped under later
+dates</b>. Two distinct incidents, separable in the data:</p>
+<ul>
+  <li><b>A feed-wide stale refresh</b>: four unrelated tickers (GFS, HUM, TSLA, MOH)
+  all recorded on 2026-07-29 at <i>exactly their 2026-07-27 closes</i>. Four names
+  landing on one shared prior bar is a whole-feed event, not coincidence.</li>
+  <li><b>A per-name stall</b>: QBTS served one cached value ($16.21, its 07-24 close)
+  on three later dates while the real price moved 35%.</li>
+</ul>
+<p>The trading engine was innocent — it faithfully recorded what the feed said.
+The feed even <i>self-healed</i> days later. But a written row is never re-read, so
+the error fossilized in a permanent record. Root cause: the desk validated every
+layer of <b>analysis</b> (benchmarks, clustering, survivorship, effective sample
+size) and had never validated the raw <b>inputs</b> underneath them.</p>
+
+<h2>The correction (and the mistake I made making it)</h2>
+<p>Fourteen rows were restated to the tape, with every before/after logged. Then I
+found that my restatement had <b>violated the desk's own standing rule</b>: <i>a
+closed row keeps the number it was scored with; corrections may be added as new
+columns, never overwritten</i>. Nobody caught it but the record itself, a day later.
+I reverted every scored number and carried the tape's values in companion columns
+(<code>*_tape</code>), so the book now shows both what was scored and what was true —
+and I amended the integrity check, which as written demanded the impossible (a
+closed row matching the tape), into the achievable and sharper demand:
+<b>a divergence must be declared; an undeclared one fails.</b></p>
+
+<h2>The generalization (the part that matters)</h2>
+<p>The wrong price was never the finding. The finding was a <i>class</i> of defect
+that then surfaced four more times in one week, wearing different clothes:</p>
+<ol>
+  <li>The price check read <b>entry</b> fills only — the largest error in the book
+  was on an <b>exit</b> (a trade booked −0.01% where the tape said +23.3%).</li>
+  <li>The refresh pipeline had silently omitted its data fetchers for three weeks
+  — every weekly &ldquo;no drift&rdquo; verdict had been arithmetic on a frozen panel.</li>
+  <li>The front page's headline figures were hand-typed SVG that nothing
+  recomputed; the &ldquo;figures are stamped and current&rdquo; check was green because
+  it audited three <i>other</i> figures.</li>
+  <li>The automation registry was missing five running jobs — alive, unwatched,
+  invisible to the weekly audit if they died.</li>
+</ol>
+<div class="pull">One sentence covers all five: <b>a green light is only as good as
+what it is wired to, and nothing knew what the lights were wired to.</b></div>
+
+<h2>The fixes (structural, each proven by breaking it first)</h2>
+<ul>
+  <li><b><code>auto_reconcile</code></b> — every session re-checks the last session's
+  fills against the feed <i>as it has since settled</i>. Open rows repair in place;
+  closed rows only ever gain a declared companion column (the standing rule holds
+  by construction). Proven by corrupting a fill and watching it get caught.</li>
+  <li><b>A frozen-bar gate</b> — entries refuse any name whose last three closes are
+  identical: measured across ~36,900 real bars, that signature occurred zero times
+  naturally, so the gate refuses only what is provably stalled. Proven by freezing
+  a name's closes and watching the run print the refusal by name.</li>
+  <li><b>A coverage audit with a ratchet</b> — an inventory of what every registered
+  check actually reads, which published surfaces no check touches, and which
+  automations the registry doesn't know. It fails if the blind spot ever
+  <i>grows</i>; demanding zero would be permanently red, and permanent red teaches
+  people to ignore red. On its own first run it caught three of its own bugs —
+  including counting its output file as a new blind spot and tripping itself.</li>
+  <li><b>Close-only scoring, expiry-before-check-date guards, vintage-correct
+  attribution joins</b> — the same input-first discipline applied to every other
+  book the week's audit reached.</li>
+</ul>
+
+<h2>Outcome</h2>
+<p>The corrections moved the desk's headline numbers <b>against</b> the strategies
+being promoted that week (two books had been overstated by the bad fills), and
+were published that way. Verified prices: 1,750 across both legs, zero undeclared
+divergences. The check count grew from ~50 to 53, with the new ones pointed at
+inputs — and at the checks themselves.</p>
+
+<h2>What I'd tell a team about this</h2>
+<ul>
+  <li>Input validation is not beneath analytical work; it is load-bearing for it.</li>
+  <li>A test that can never pass is not a standard, and a test that always passes
+  may be pointed at nothing. Both need auditing — mechanically, not by resolve.</li>
+  <li>Corrections belong <i>beside</i> records, not over them. An audit trail you
+  can overwrite is a story, not a record.</li>
+  <li>The human noticing &ldquo;that price can't be right&rdquo; is the last line of
+  defense. The goal of the week's work was to stop being needed there — and the
+  next three input defects were caught by the machine before I saw them.</li>
+</ul>
+
+<footer>
+  Anupam Patil · <a href="mailto:apati077@ucr.edu">apati077@ucr.edu</a> ·
+  <a href="index.html">portfolio</a> · <a href="https://github.com/jarvisss007">GitHub</a><br>
+  Related: <a href="https://github.com/jarvisss007/strategy-lab">strategy-lab</a> (the public
+  arena this desk feeds) · <a href="https://github.com/jarvisss007/backtest-overfitting">backtest-overfitting</a>
+</footer>
+</div>
+</body>
+</html>
