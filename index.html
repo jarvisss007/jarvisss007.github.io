@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Anupam Patil — Quantitative Finance Research & FP&A</title>
-<meta name="description" content="FP&A analyst and quantitative finance researcher. Two working papers, four publications, an interactive hidden-Markov regime explorer, and a track record of honest evaluation.">
+<title>Anupam Patil — AI Engineering & Quantitative Finance Research</title>
+<meta name="description" content="AI engineer and quantitative finance researcher. Three working papers, an autonomous self-scoring research desk, an interactive hidden-Markov regime explorer, and a track record of honest evaluation.">
 <style>
   :root{
     --bg:#0d1117; --panel:#161b22; --line:#21262d; --text:#e6edf3;
@@ -111,6 +111,7 @@
   <a href="#explorer">Regime Explorer</a>
   <a href="#game">🎮 The Game</a>
   <a href="#live">Live Demos</a>
+  <a href="#desk">AI Research Desk</a>
   <a href="#question">Research Question</a>
   <a href="#experience">Experience</a>
   <a href="#projects">Projects</a>
@@ -125,19 +126,20 @@
   <canvas id="mc"></canvas>
   <span class="mcnote">live: regime-switching Monte Carlo, parameters from my fitted HMM</span>
   <h1>Anupam Prabhugouda Patil</h1>
-  <p class="tagline">FP&amp;A analyst &amp; quantitative finance researcher. I test whether popular
-  quant ideas survive <b>honest out-of-sample evaluation</b> — and publish the code either way.</p>
-  <p class="headline">FP&amp;A @ GRD Trucking · MS Finance, UC Riverside · 4 publications ·
-  open to FP&amp;A, market-risk &amp; model-validation roles — USA · Singapore · HK · UAE · India</p>
+  <p class="tagline">AI engineer &amp; quantitative finance researcher. I build agent systems that run
+  research autonomously — and test whether popular quant ideas survive <b>honest out-of-sample
+  evaluation</b>, publishing the code either way.</p>
+  <p class="headline">Automation engineering @ GRD Trucking · MS Finance, UC Riverside · 3 working papers ·
+  open to forward-deployed / AI engineer &amp; quantitative research roles — global</p>
   <div class="links">
     <a href="https://github.com/jarvisss007">GitHub</a>
     <a href="https://www.linkedin.com/in/anupam-p-patil">LinkedIn</a>
     <a href="mailto:apati077@ucr.edu">apati077@ucr.edu</a>
   </div>
   <div class="stats" id="stats">
-    <div class="stat"><div class="n" data-n="2">0</div><div class="l">working papers</div></div>
-    <div class="stat"><div class="n" data-n="4">0</div><div class="l">publications</div></div>
+    <div class="stat"><div class="n" data-n="3">0</div><div class="l">working papers</div></div>
     <div class="stat"><div class="n" data-n="37">0</div><div class="l">CI-verified tests</div></div>
+    <div class="stat"><div class="n" data-n="12">0</div><div class="l">frozen rules forward-testing daily</div></div>
     <div class="stat"><div class="n" data-n="8929">0</div><div class="l">out-of-sample days</div></div>
     <div class="stat"><div class="n" data-n="40">0</div><div class="l">years of market data</div></div>
   </div>
@@ -151,6 +153,27 @@
   walk-forward protocols, forecast-comparison tests, tail-risk backtests — and apply it to claims
   that matter. Every number below reproduces from public data with one command; automated tests
   re-verify the papers&rsquo; results on every commit.</p>
+
+  <div class="paper">
+    <h3>How Many Retail Trading Strategies Survive Honest Evaluation?<br>
+    <span style="font-weight:400;font-size:.95rem;color:var(--muted)">A systematic survey: eight classic strategy families, full parameter grids, judged by the backtest-overfitting toolkit</span></h3>
+    <div class="meta">2026 · 8 strategy families × full config grids · 15y daily data, 120 tickers · Deflated Sharpe + PBO/CSCV + OOS holdout + walk-forward</div>
+    <p>Built a research engine that tests classic retail strategy families — momentum, mean-reversion,
+    trend, turn-of-month, volatility-managed and more — across their entire parameter grids, then judges
+    every one through a pre-registered evaluation gate: Deflated Sharpe Ratio, Probability of Backtest
+    Overfitting, minimum backtest length, and a held-out 70/30 out-of-sample split, net of costs.
+    Hypotheses are frozen in a public registry <i>before</i> running; a scheduled agent re-validates
+    them weekly on newly accrued data and flags any unregistered addition as a mining violation.</p>
+    <div class="finding"><b>Finding:</b> no market-neutral family survives the gate. The apparent
+    survivors are long-only equity beta-timing flattered by a bull-market window and a survivorship-biased
+    universe — and the paper says so. Twelve frozen rules continue forward-testing daily in a public
+    paper-trading arena; the forward record, not the backtest, gets the last word.</div>
+    <div class="badges">
+      <a class="plink" href="https://github.com/jarvisss007/strategy-lab/blob/main/paper/honest_evaluation_survey.md">paper →</a>
+      <a class="plink" href="https://github.com/jarvisss007/strategy-lab/blob/main/REGISTRY.md">pre-registration →</a>
+      <a class="plink" href="https://github.com/jarvisss007/strategy-lab">code &amp; forward book →</a>
+    </div>
+  </div>
 
   <div class="paper">
     <h3>Do Hidden Markov Regimes Add Out-of-Sample Value?<br>
@@ -275,6 +298,49 @@
   </div>
 </section>
 
+<section id="desk" class="rv">
+  <h2>An AI-Engineered Research Desk That Runs Itself</h2>
+  <p class="sub">The research above isn&rsquo;t run by hand. I build and operate a fleet of LLM-agent
+  and scheduled-automation systems that collect data, take registered paper trades, mark books against
+  live option chains, score their own forecasts, and audit their own inputs — every day, unattended.
+  This is the engineering I want to do professionally: agents deployed against a real, messy domain,
+  with verification designed in.</p>
+  <div class="grid2">
+    <div class="card">
+      <h3>A pre-registered paper-trading arena</h3>
+      <p>Twelve frozen mechanical rules take paper trades daily on a 120-ticker universe. Every rule is
+      written into a public registry with its thesis <i>before</i> it runs; the full blotter, open book
+      and per-rule record are committed to the repo on every run. A weekly sentinel agent diffs the code
+      against the registry and flags unregistered strategies as mining violations.</p>
+      <div class="badges"><span class="plink"><a href="https://github.com/jarvisss007/strategy-lab/blob/main/REGISTRY.md">registry</a> · <a href="https://github.com/jarvisss007/strategy-lab/blob/main/reports/arena_trades.csv">live blotter</a></span></div>
+    </div>
+    <div class="card">
+      <h3>Self-scoring forecast ledgers</h3>
+      <p>Every research agent must file probabilistic forecasts, which are scored later with Brier
+      decomposition (calibration vs resolution) — agents are graded on calibration, not on being right.
+      The crypto forecaster and seismic module below are public examples: each keeps a scoreboard
+      against a naive baseline and shows it, including when the honest answer is &ldquo;no edge.&rdquo;</p>
+      <div class="badges"><span class="plink"><a href="https://jarvisss007.github.io/crypto-microstructure/forecast.html">crypto ↗</a> · <a href="https://jarvisss007.github.io/live-events-tracker/">seismic ↗</a></span></div>
+    </div>
+    <div class="card">
+      <h3>Input-integrity tooling</h3>
+      <p>Validated analysis on unvalidated inputs is still wrong — so the desk grew its own guards:
+      recorded entry prices are checked against the tape, every published figure carries a provenance
+      stamp naming its inputs, options marks carry a quality flag (stale source, wide book) and untrusted
+      marks are shown struck through rather than silently believed.</p>
+      <div class="badges"><span class="plink"><a href="https://github.com/jarvisss007/strategy-lab">price_integrity.py in strategy-lab</a></span></div>
+    </div>
+    <div class="card">
+      <h3>Unattended data collectors</h3>
+      <p>Scheduled agents (launchd + GitHub Actions) run an SEC EDGAR Form&nbsp;4 collector, a Coinbase
+      order-flow recorder, an after-close intraday day-type recorder, and options-chain snapshots —
+      growing datasets that make previously unanswerable questions testable. The insider feed and its
+      Pages viewer deploy automatically on every collection.</p>
+      <div class="badges"><span class="plink"><a href="https://github.com/jarvisss007/insider-radar">insider-radar</a> · <a href="https://github.com/jarvisss007/crypto-microstructure">crypto-microstructure</a></span></div>
+    </div>
+  </div>
+</section>
+
 <section id="question" class="rv">
   <h2>The Question I Want to Pursue in a PhD</h2>
   <div class="q">
@@ -292,9 +358,16 @@
 <section id="experience" class="rv">
   <h2>Experience</h2>
   <div class="card">
-    <h3>FP&amp;A Analyst — GRD Trucking</h3>
-    <div class="meta">2026 – present · logistics</div>
-    <p>Financial planning, reporting, and cost analysis for a trucking &amp; logistics operator.</p>
+    <h3>Automation Engineer / Analyst — GRD Trucking</h3>
+    <div class="meta">Jul 2026 – present · drayage logistics</div>
+    <ul class="b">
+      <li>Designing and building the company&rsquo;s dispatch and billing automation: document ingestion,
+      order entry, rating and invoicing pipelines replacing manual spreadsheet workflows.</li>
+      <li>LLM-assisted document processing for the messy reality of freight paperwork — rate
+      confirmations, PODs, invoices — with human-review checkpoints where accuracy is contractual.</li>
+      <li>Forward-deployed in practice: requirements come from dispatchers mid-shift, and the software
+      has to survive contact with real operations the same week.</li>
+    </ul>
   </div>
   <div class="card">
     <h3>Financial Analyst — Friendly Franchisees LLC</h3>
@@ -352,6 +425,9 @@
     <div class="repo"><h3><a href="https://github.com/jarvisss007/backtest-overfitting">backtest-overfitting</a></h3>
       <p>Tools for detecting when a backtest is fooling you: Deflated Sharpe Ratio, Probability of
       Backtest Overfitting (CSCV), minimum backtest length. The honest-evaluation thesis as a reusable library.</p></div>
+    <div class="repo"><h3><a href="https://github.com/jarvisss007/strategy-lab">strategy-lab</a></h3>
+      <p>The systematic survey engine: 8 strategy families judged by the deflation+PBO gate, a frozen
+      pre-registration registry, and a 12-rule paper-trading arena whose forward book commits daily. Home of working paper #3.</p></div>
     <div class="repo"><h3><a href="https://github.com/jarvisss007/crypto-microstructure">crypto-microstructure</a></h3>
       <p>Live Coinbase order-flow dashboard, self-learning 15-min forecaster, and an honest backtest harness (IC, permutation test, cost-aware). <a href="https://jarvisss007.github.io/crypto-microstructure/forecast.html">Live ↗</a></p></div>
     <div class="repo"><h3><a href="https://github.com/jarvisss007/live-events-tracker">live-events-tracker</a></h3>
@@ -365,6 +441,11 @@
 
 <section id="publications" class="rv">
   <h2>Publications</h2>
+  <div class="pub">
+    <h3>How Many Retail Trading Strategies Survive Honest Evaluation? A Systematic Survey</h3>
+    <div class="meta">Working paper · Aug 2026 · <a href="https://github.com/jarvisss007/strategy-lab">repo</a></div>
+    <p>8 strategy families × full parameter grids; Deflated Sharpe, PBO/CSCV, OOS holdout, pre-registered hypotheses, live forward test.</p>
+  </div>
   <div class="pub">
     <h3>Do Hidden Markov Regimes Add Out-of-Sample Value? Separating Fat Tails from Hidden States</h3>
     <div class="meta">Working paper · Jul 2026 · <a href="https://github.com/jarvisss007/regime-monte-carlo">repo</a></div>
@@ -412,6 +493,10 @@
     <span class="tag">VaR/ES backtesting</span><span class="tag">Kupiec · Christoffersen · Berkowitz</span>
     <span class="tag">Diebold–Mariano</span><span class="tag">Model Confidence Sets</span>
     <span class="tag">block bootstrap</span><span class="tag">walk-forward evaluation</span></div></div>
+  <div class="skillrow"><b>AI engineering</b>
+    <div class="tags"><span class="tag">LLM agent systems (Anthropic API / Claude)</span><span class="tag">agentic workflow design</span>
+    <span class="tag">scheduled autonomous pipelines (launchd, GitHub Actions)</span><span class="tag">self-scoring / eval harnesses</span>
+    <span class="tag">provenance &amp; input-integrity tooling</span><span class="tag">forecast calibration (Brier decomposition)</span></div></div>
   <div class="skillrow"><b>Programming &amp; data</b>
     <div class="tags"><span class="tag">Python (pandas, scikit-learn, scipy)</span><span class="tag">SQL</span>
     <span class="tag">C++</span><span class="tag">pytest &amp; GitHub Actions CI</span><span class="tag">LaTeX</span>
