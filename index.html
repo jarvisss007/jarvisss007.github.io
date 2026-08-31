@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Anupam Patil — AI Engineering & Quantitative Finance Research</title>
@@ -8,12 +9,12 @@
 <style>
   :root{
     --bg:#0d1117; --panel:#161b22; --line:#21262d; --text:#e6edf3;
-    --muted:#8b949e; --accent:#58a6ff; --calm:#2a9d8f; --normal:#e9c46a;
-    --turb:#e76f51; --mono:'SF Mono',ui-monospace,Menlo,Consolas,monospace;
+    --muted:#93a0af; --accent:#c9a227; --accent2:#58a6ff; --calm:#2a9d8f; --normal:#e9c46a;
+    --turb:#e76f51; --mono:'IBM Plex Mono','SF Mono',ui-monospace,Menlo,Consolas,monospace;
   }
   *{margin:0;padding:0;box-sizing:border-box}
   html{scroll-behavior:smooth}
-  body{background:var(--bg);color:var(--text);font:16px/1.65 -apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif}
+  body{background:var(--bg);color:var(--text);font:16px/1.68 'IBM Plex Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif}
   a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
   .wrap{max-width:920px;margin:0 auto;padding:0 24px}
   nav{position:sticky;top:0;background:#0d1117ee;backdrop-filter:blur(8px);border-bottom:1px solid var(--line);z-index:20}
@@ -107,7 +108,7 @@
 
 <nav><div class="wrap">
   <a class="brand" href="#top">AP</a>
-  <a href="#research">Papers</a>
+  <a href="#research">Papers</a><a href="#firm">The Firm</a>
   <a href="#explorer">Regime Explorer</a>
   <a href="#game">🎮 The Game</a>
   <a href="#live">Live Demos</a>
@@ -138,11 +139,13 @@
   </div>
   <div class="stats" id="stats">
     <div class="stat"><div class="n" data-n="3">0</div><div class="l">working papers</div></div>
-    <div class="stat"><div class="n" data-n="37">0</div><div class="l">CI-verified tests</div></div>
-    <div class="stat"><div class="n" data-n="12">0</div><div class="l">frozen rules forward-testing daily</div></div>
-    <div class="stat"><div class="n" data-n="8929">0</div><div class="l">out-of-sample days</div></div>
+    <div class="stat"><div class="n" data-n="60">0</div><div class="l">CI-verified tests</div></div>
+    <div class="stat"><div class="n" data-n="45">0</div><div class="l">autonomous agents on schedule</div></div>
+    <div class="stat"><div class="n" data-n="112">0</div><div class="l">machine checks auditing the desk</div></div>
+    <div class="stat"><div class="n" data-n="1749">0</div><div class="l">forecasts scored on their dates</div></div>
     <div class="stat"><div class="n" data-n="40">0</div><div class="l">years of market data</div></div>
   </div>
+  <div style="color:var(--muted);font:12px/1.5 var(--mono);margin-top:8px">counters recomputed from the repositories · as of 2026-08-31</div>
 </header>
 
 <section id="research" class="rv">
@@ -224,6 +227,66 @@
     before touching markets. Every number regenerates from public data with one command, and a
     continuous-integration test suite re-verifies the papers&rsquo; anchor results on every commit —
     the green badges above are live. Results that cannot be re-derived are claims, not findings.</p>
+  </div>
+</section>
+
+<section id="firm" class="rv">
+  <h2>The Governed Desk — Leo&rsquo;s Trading Firm</h2>
+  <p style="max-width:70ch;color:var(--muted)">Forty-five agents collect, forecast, trade on
+  paper, and — the part that matters — <b style="color:var(--text)">argue with themselves on a
+  fixed schedule</b>. Every number passes a deflation gate before it may be published; a daily
+  council interviews every lab; a resolver closes an issue only when a machine test proves it;
+  and a shared brain of paid-for mechanisms is read by every agent before it acts. The
+  product so far is honest: <b style="color:var(--text)">zero strategies have cleared the
+  gate</b> — and the machinery that keeps producing that answer is the portfolio.</p>
+
+  <figure style="background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:18px;overflow-x:auto;margin:18px 0">
+  <svg viewBox="0 0 960 300" role="img" style="min-width:640px;width:100%;height:auto;color:var(--muted)"
+       aria-label="Signal path of the firm: always-on collectors feed thirteen labs; every claim passes the deflation gate; the council, resolver, coach and evolution loop feed a shared brain that every agent reads before acting.">
+    <defs><marker id="fa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10z" fill="currentColor"/></marker>
+    <marker id="fg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10z" fill="#c9a227"/></marker></defs>
+    <g font-family="var(--mono)" font-size="11">
+      <rect x="10" y="20" width="180" height="52" rx="8" fill="none" stroke="currentColor"/>
+      <text x="24" y="42" fill="currentColor" font-weight="600">COLLECTORS</text>
+      <text x="24" y="60" fill="currentColor" opacity=".8">chains · flow · filings · 24/7</text>
+      <rect x="240" y="20" width="180" height="52" rx="8" fill="none" stroke="currentColor"/>
+      <text x="254" y="42" fill="currentColor" font-weight="600">13 LABS</text>
+      <text x="254" y="60" fill="currentColor" opacity=".8">registered hypotheses only</text>
+      <rect x="470" y="12" width="200" height="68" rx="8" fill="none" stroke="#c9a227" stroke-width="1.6"/>
+      <text x="484" y="34" fill="#c9a227" font-weight="700">THE GATE</text>
+      <text x="484" y="51" fill="currentColor" opacity=".9">deflated Sharpe · PBO · day-clustered n</text>
+      <text x="484" y="67" fill="currentColor" opacity=".9">survivorship charged · executable prices</text>
+      <rect x="720" y="20" width="180" height="52" rx="8" fill="none" stroke="currentColor"/>
+      <text x="734" y="42" fill="currentColor" font-weight="600">FORWARD BOOKS</text>
+      <text x="734" y="60" fill="currentColor" opacity=".8">rows = independent days</text>
+      <line x1="190" y1="46" x2="234" y2="46" stroke="currentColor" stroke-width="1.4" marker-end="url(#fa)"/>
+      <line x1="420" y1="46" x2="464" y2="46" stroke="currentColor" stroke-width="1.4" marker-end="url(#fa)"/>
+      <line x1="670" y1="46" x2="714" y2="46" stroke="currentColor" stroke-width="1.4" marker-end="url(#fa)"/>
+      <rect x="240" y="150" width="430" height="58" rx="8" fill="none" stroke="#c9a227" stroke-width="1.6"/>
+      <text x="254" y="172" fill="#c9a227" font-weight="700">THE GOVERNANCE LOOP</text>
+      <text x="254" y="190" fill="currentColor" opacity=".9">daily council interviews every lab · resolver closes only on a passing test</text>
+      <text x="254" y="204" fill="currentColor" opacity=".9">weekly evolution: &le;2 frozen variants, every trial taxed (16 and counting)</text>
+      <path d="M810 72 L810 179 L674 179" fill="none" stroke="#c9a227" stroke-width="1.5" marker-end="url(#fg)"/>
+      <path d="M236 179 L120 179 L120 76" fill="none" stroke="#c9a227" stroke-width="1.5" stroke-dasharray="6 4" marker-end="url(#fg)"/>
+      <text x="130" y="196" fill="#c9a227" font-size="11">lessons feed THE FIRM BRAIN — 8 mechanisms every agent reads before acting</text>
+      <text x="10" y="262" fill="currentColor" opacity=".85">Verdicts the loop has produced: implied &gt; realized in every 0DTE bucket (&minus;$43.10/straddle, t = &minus;2.65) ·</text>
+      <text x="10" y="280" fill="currentColor" opacity=".85">the registered exit finished LAST in all 5 groups (bracket wins) · 3,460-entry intraday grid: every cell negative · 133 of 142 register issues closed by proof</text>
+    </g>
+  </svg>
+  <figcaption style="color:var(--muted);font-size:13px;margin-top:10px">The schematic is the pitch: most stacks collect and display — this one audits itself, counts its own search
+  (a mining ledger taxes every variant ever tried), and publishes the governing number even when it is the unflattering one (0DTE progress reads 22/60 admissible, not the 25/60 row count).</figcaption>
+  </figure>
+
+  <div class="grid3" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px">
+    <div style="background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 16px">
+      <div style="font:600 12px var(--mono);color:var(--accent);letter-spacing:.08em">FORWARD BOOKS A–D</div>
+      <p style="margin:6px 0 0;font-size:13.5px;color:var(--muted)">One entry per session at executable prices, scored at settle (|close&minus;K|, never a mid). Registered <i>expecting to lose</i> against the desk&rsquo;s own measurement — confirming it forward is the result.</p></div>
+    <div style="background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 16px">
+      <div style="font:600 12px var(--mono);color:var(--accent);letter-spacing:.08em">THE FIRM BRAIN</div>
+      <p style="margin:6px 0 0;font-size:13.5px;color:var(--muted)">Cross-lab canon of paid-for mechanisms (&ldquo;a guard that checks the clock has not checked the data&rdquo;). A lesson bought once is never bought twice; a wiring check fails if any agent stops reading it.</p></div>
+    <div style="background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 16px">
+      <div style="font:600 12px var(--mono);color:var(--accent);letter-spacing:.08em">112 MACHINE CHECKS</div>
+      <p style="margin:6px 0 0;font-size:13.5px;color:var(--muted)">Display-matches-source, no weekend check dates, refusals state reasons, empty books must exist. Several were proven by deliberately breaking them first — a test that cannot fail teaches nothing.</p></div>
   </div>
 </section>
 
