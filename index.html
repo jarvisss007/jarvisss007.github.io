@@ -369,6 +369,18 @@
   This is the engineering I want to do professionally: agents deployed against a real, messy domain,
   with verification designed in.</p>
   <div class="grid2">
+    <div class="card" style="grid-column:1/-1">
+      <h3>Deterministic guardrails for LLM agents <a href="https://github.com/jarvisss007/agent-verification-lab">&rarr; the lab</a></h3>
+      <p>The rule underneath everything on this page: the model proposes, and something else decides
+      whether the proposal executes. I pulled that discipline out of my production system into four
+      small, independently tested primitives &mdash; a finite-state guard, an idempotent executor, a
+      default-deny policy gate, and a hash-chained event log that survives a crash by replay. Each ships
+      with tests proving exactly one guarantee: an undeclared transition cannot fire, a retried action
+      runs its side effect exactly once, anything not allow-listed is blocked, and a tampered log entry
+      breaks the chain. The demo routes a toy broker-email triage through all four, kills the process
+      mid-run, and rebuilds the final state from the log alone.</p>
+      <div class="badges"><span class="plink"><a href="https://github.com/jarvisss007/agent-verification-lab">code &amp; tests &#8599;</a> &middot; 18 tests, green on Python 3.11&ndash;3.13</span></div>
+    </div>
     <div class="card">
       <h3>A pre-registered paper-trading arena</h3>
       <p>Twelve frozen mechanical rules take paper trades daily on a 120-ticker universe. Every rule is
