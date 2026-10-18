@@ -381,6 +381,25 @@
       mid-run, and rebuilds the final state from the log alone.</p>
       <div class="badges"><span class="plink"><a href="https://github.com/jarvisss007/agent-verification-lab">code &amp; tests &#8599;</a> &middot; 18 tests, green on Python 3.11&ndash;3.13</span></div>
     </div>
+    <div class="card" style="grid-column:1/-1">
+      <h3>Case study: agents that couldn&rsquo;t grade their own homework <a href="https://github.com/jarvisss007/signal-audit">&rarr; signal-audit</a></h3>
+      <p>The same discipline, run end to end on a real question: does a trading indicator&rsquo;s top-grade
+      signal actually work? An orchestrating agent did the research under a written pre-registration; a
+      second, read-only reviewer agent existed only to find what the first one got wrong. It found it
+      before the holdout was touched: the first yardstick, run on <i>shuffled</i> prices where nothing can
+      be found, still &ldquo;found&rdquo; +1.45%. The promising result had come from the measuring stick,
+      not the indicator. The fix was frozen into code as a placebo gate (a biased run voids itself), five
+      files were hash-frozen, the test was counted in an append-only trial ledger before it ran, and it
+      was scored once on 408 fresh stocks: +0.29% [&minus;0.72, +1.15], <b>not supported</b>. The line was
+      closed exactly as the pre-registration said it would be.</p>
+      <img src="signal_audit_four_ways.svg" alt="The same question measured four ways: first method +1.88%, first method on shuffled prices +1.45%, fixed method +0.73%, fixed method on 408 fresh stocks +0.29% with an interval spanning zero" style="width:100%;margin-top:12px">
+      <p class="note">Swap &ldquo;indicator&rdquo; for a model, a pricing rule or a dispatch policy and the loop is
+      the same: any agent that makes a claim from data needs a yardstick that can&rsquo;t flatter it. The
+      repo ships that loop as a toolkit for any OHLCV + signal CSV, checked on synthetic worlds where the
+      truth is known: with no edge planted, the biased yardstick cried &ldquo;supported&rdquo; in 9 of 25
+      worlds, the corrected one in 0 of 25, and it still found a planted edge in 24 of 25.</p>
+      <div class="badges"><span class="plink"><a href="https://github.com/jarvisss007/signal-audit">code &amp; tests &#8599;</a> &middot; <a href="https://github.com/jarvisss007/signal-audit/blob/main/docs/reviewer_report.md">the reviewer&rsquo;s report</a> &middot; 10 tests &middot; one-minute synthetic demo</span></div>
+    </div>
     <div class="card">
       <h3>A pre-registered paper-trading arena</h3>
       <p>Twelve frozen mechanical rules take paper trades daily on a 120-ticker universe. Every rule is
@@ -519,6 +538,10 @@
     <div class="repo"><h3><a href="https://github.com/jarvisss007/strategy-lab">strategy-lab</a></h3>
       <p>The systematic survey engine: 8 strategy families judged by the deflation+PBO gate, a frozen
       pre-registration registry, and a 12-rule paper-trading arena whose forward book commits daily. Home of working paper #3.</p></div>
+    <div class="repo"><h3><a href="https://github.com/jarvisss007/signal-audit">signal-audit</a></h3>
+      <p>An agent-governed test of a trading indicator: pre-registration, a reviewer agent that caught a biased
+      yardstick (+1.45% on shuffled prices), a placebo gate, a one-shot holdout on 408 fresh stocks
+      (+0.29% [&minus;0.72, +1.15], not supported) and an append-only trial ledger. The toolkit runs on any OHLCV + signal CSV.</p></div>
     <div class="repo"><h3><a href="https://github.com/jarvisss007/crypto-microstructure">crypto-microstructure</a></h3>
       <p>Live Coinbase order-flow dashboard, self-learning 15-min forecaster, and an honest backtest harness (IC, permutation test, cost-aware). <a href="https://jarvisss007.github.io/crypto-microstructure/forecast.html">Live ↗</a></p></div>
     <div class="repo"><h3><a href="https://github.com/jarvisss007/live-events-tracker">live-events-tracker</a></h3>
