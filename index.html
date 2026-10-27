@@ -400,6 +400,27 @@
       worlds, the corrected one in 0 of 25, and it still found a planted edge in 24 of 25.</p>
       <div class="badges"><span class="plink"><a href="https://github.com/jarvisss007/signal-audit">code &amp; tests &#8599;</a> &middot; <a href="https://github.com/jarvisss007/signal-audit/blob/main/docs/reviewer_report.md">the reviewer&rsquo;s report</a> &middot; 10 tests &middot; one-minute synthetic demo</span></div>
     </div>
+    <div class="card" style="grid-column:1/-1">
+      <h3>Case study: a risk layer the agents can&rsquo;t talk their way around <a href="https://github.com/jarvisss007/risk-gate">&rarr; risk-gate</a></h3>
+      <p>After the worst day of a paper-only research estate run by agents (&minus;4.6% on a day the S&amp;P 500
+      fell 1.2%), the operator asked for a &minus;3% stop, for the agents to short when the market falls, and
+      to &ldquo;make it positive&rdquo;. The data said no: on SPY 1993&ndash;2026 a 3% trailing stop turns
+      10.8% a year into 3.4% and still falls 35% at worst, and SPY explained only 3.4% of the account&rsquo;s
+      daily swings, so no market hedge would have helped. The re-entry rule, not the threshold, decides a
+      stop: re-entering on the first close above the 200-day average keeps the return and halves the worst
+      fall. A read-only reviewer agent then <b>passed one rule and blocked three</b>, in writing, and the
+      owner made the remaining sizing call himself. What shipped is one halt file every desk&rsquo;s writer
+      must read before a new entry: an unreadable file refuses, a refused entry is recorded and later
+      scored, keys set and clear only by rules written in advance, and nothing is ever sold to fix a number.
+      The same night the reviewer caught a measurement artefact (options at full delta notional read
+      exposure as 211% of equity; capped at max loss, 113%) and the fix went through the same gate.</p>
+      <img src="risk_gate_stop_grid.png" alt="SPY 1993-2026: trailing stops from 5% to 25% under four re-entry rules, plotted as annual return against worst fall; re-entering above the 200-day average at 8-12% sits closest to buy-and-hold return with roughly half its worst fall" style="width:100%;margin-top:12px">
+      <p class="note">Swap &ldquo;trading desk&rdquo; for a dispatch agent or a pricing agent and the layer is
+      the same: agents don&rsquo;t get a prompt saying &ldquo;be careful&rdquo;, they get a file they cannot
+      route around. The repo ships the gate as a small generic package with a synthetic estate and a
+      walkthrough in which three bypass attempts are refused.</p>
+      <div class="badges"><span class="plink"><a href="https://github.com/jarvisss007/risk-gate">code &amp; tests &#8599;</a> &middot; <a href="https://github.com/jarvisss007/risk-gate/blob/main/docs/reviewer_verdicts.md">the reviewer&rsquo;s verdicts</a> &middot; 17 tests &middot; three bypasses refused</span></div>
+    </div>
     <div class="card">
       <h3>A pre-registered paper-trading arena</h3>
       <p>Twelve frozen mechanical rules take paper trades daily on a 120-ticker universe. Every rule is
@@ -542,6 +563,9 @@
       <p>An agent-governed test of a trading indicator: pre-registration, a reviewer agent that caught a biased
       yardstick (+1.45% on shuffled prices), a placebo gate, a one-shot holdout on 408 fresh stocks
       (+0.29% [&minus;0.72, +1.15], not supported) and an append-only trial ledger. The toolkit runs on any OHLCV + signal CSV.</p></div>
+    <div class="repo"><h3><a href="https://github.com/jarvisss007/risk-gate">risk-gate</a></h3>
+      <p>A risk layer agents cannot bypass: one halt file every writer must read, keys set and cleared by pre-written rules,
+      refusals recorded and scored, a reviewer agent that passed one rule of four. Includes the SPY stop-rule grid (1993&ndash;2026) that ruled out a 3% stop.</p></div>
     <div class="repo"><h3><a href="https://github.com/jarvisss007/crypto-microstructure">crypto-microstructure</a></h3>
       <p>Live Coinbase order-flow dashboard, self-learning 15-min forecaster, and an honest backtest harness (IC, permutation test, cost-aware). <a href="https://jarvisss007.github.io/crypto-microstructure/forecast.html">Live ↗</a></p></div>
     <div class="repo"><h3><a href="https://github.com/jarvisss007/live-events-tracker">live-events-tracker</a></h3>
